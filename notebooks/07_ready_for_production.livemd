@@ -39,6 +39,12 @@ There's one final hurdle before your training is complete—getting ready for pr
 
 
 
+## Migration Safety
+
+Before talking about runtime concerns, a quick note on schema safety. Starting in v2.22, Oban verifies that the `oban_jobs` table exists and the migration version is current whenever it boots in a testing mode (`:inline` or `:manual`). A missing or outdated migration fails fast at startup with an actionable message, rather than surfacing later as a cryptic database error mid-test or—worse—in production.
+
+There's nothing to configure: as long as you run `mix ecto.migrate` after upgrading Oban, your test suite will tell you if you ever forget.
+
 ## Managing Jobs
 
 Job introspection and uniqueness is built on keeping job rows in the database after they have completed. To prevent the `oban_jobs` table from growing indefinitely, a [`Pruner`](https://hexdocs.pm/oban/Oban.Plugins.Pruner.html) plugin provides out-of-band deletion of `completed`, `cancelled` and `discarded` jobs.
@@ -132,7 +138,7 @@ Oban.Job
 
 Oban heavily utilizes [Telemetry](https://hexdocs.pm/oban/Oban.Telemetry.html) for instrumentation at every level. From job execution, plugin activity, through to every database call there's a telemetry event to hook into.
 
-The simplest way to leverage Oban's telemetry usage is through the [default logger](https://hexdocs.pm/oban/Oban.Telemetry.html#attach_default_logger/1). In the test below, attach the default logger and use `perform_job/3` to trigger a few log events (test jobs emit the same telemetry as production). Use [catpure_log/1](https://hexdocs.pm/ex_unit/1.12/ExUnit.CaptureLog.html) to record the log lines and make assertions about them.
+The simplest way to leverage Oban's telemetry usage is through the [default logger](https://hexdocs.pm/oban/Oban.Telemetry.html#attach_default_logger/1). In the test below, attach the default logger and use `perform_job/3` to trigger a few log events (test jobs emit the same telemetry as production). Use [capture_log/1](https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html) to record the log lines and make assertions about them.
 
 <details>
 <summary><i>Use a Hint</i></summary>

@@ -18,7 +18,7 @@ Through this exercise you'll gain understanding of how to install Oban, prepare 
 
 ## Installation
 
-Typically, you'd [install Oban into your application](https://hexdocs.pm/oban/installation.html) by adding the package to your `deps`, adding some configuration, and generating a few migrations. Since this is LiveBook and not an application, we've already setup the `:oban` package and we'll skip straight to some simple configuration after some minimial setup.
+Typically, you'd [install Oban into your application](https://hexdocs.pm/oban/installation.html) by adding the package to your `deps`, adding some configuration, and generating a few migrations. Since this is LiveBook and not an application, we've already setup the `:oban` package and we'll skip straight to some simple configuration after some minimal setup.
 
 ## Migrations
 
@@ -41,7 +41,7 @@ use `Oban.Migration` functions to define `up` and `down`:
 
 ```elixir
 def up do
-  Oban.Migration.up(version: 12)
+  Oban.Migration.up(version: 14)
 end
 
 def down do
@@ -78,13 +78,15 @@ Scroll through the migration output and note that there are tables, indexes, and
 
 To verify everything is working we'll [start an Oban instance](https://hexdocs.pm/oban/Oban.html#start_link/1) with the absolute minimum configuration, the `repo` and a single `default` queue.
 
+Oban supports multiple databases via pluggable engines: `Oban.Engines.Basic` for Postgres (the default), `Oban.Engines.Lite` for SQLite3, and `Oban.Engines.Dolphin` for MySQL. Production apps typically set the engine explicitly, but for Postgres the default is fine.
+
 <details>
 <summary><i>Use a Hint</i></summary>
 
 Set `start_opts` with a repo and queues:
 
 ```elixir
-start_opts: [repo: MyApp.Repo, queues: [default: 10]]
+start_opts = [repo: MyApp.Repo, queues: [default: 10]]
 ```
 
 </details>
@@ -175,7 +177,7 @@ Use `MyApp.InspectWorker.new/1` to create a Job changeset and pass it into `Oban
 # Your turn...
 ```
 
-There you have it—a minimual yet fully functional Oban installation 🎉!
+There you have it—a minimal yet fully functional Oban installation 🎉!
 
 From here on in we're working on **ChowMojo**, a food delivery app for exotic pets. Throughout these exercises you'll enhance the app's functionality with one or more background processing tasks.
 
@@ -192,7 +194,7 @@ Use `psql` (Postgres console) or another database explorer tool to look at the t
 
 #### Inspect the running Oban supervision tree
 
-Look at which processes are running under the `Oban` instance's supervision tree either through beam tooling, the registry, or browsing the [source code](https://github.com/sorentwo/oban/blob/main/lib/oban.ex#L483).
+Look at which processes are running under the `Oban` instance's supervision tree either through beam tooling, the registry, or browsing the [source code](https://github.com/oban-bg/oban/blob/main/lib/oban.ex).
 
 1. What are the direct children of the Oban supervisor?
 2. Which process handles running queues?

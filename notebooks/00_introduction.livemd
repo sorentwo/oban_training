@@ -41,7 +41,7 @@ Computation that is performed asynchronously because it is slow, resource intens
 
 <!-- livebook:{"break_markdown":true} -->
 
-#### Guiding principals
+#### Guiding principles
 
 * **Persistent** — Retaining jobs between restarts
 * **Reliable** — Never lose a job
@@ -115,6 +115,8 @@ end
 Jobs flow through "states" indicating their place in a finite state machine. They start inserted or scheduled, transition to executing, then to an end state, or back to retryable if there are retries available.
 
 ![States](files/oban_state_diagram.png)
+
+The complete set of states is `:scheduled`, `:available`, `:executing`, `:retryable`, `:completed`, `:cancelled`, `:discarded`, and `:suspended` (added in v2.21 for holding jobs without processing until they are explicitly resumed).
 
 <!-- livebook:{"break_markdown":true} -->
 

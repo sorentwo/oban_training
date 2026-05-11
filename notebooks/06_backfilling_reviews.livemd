@@ -189,7 +189,7 @@ ExUnit.start(auto_run: false)
 defmodule ChowMojo.AnalyzerTest do
   use ChowMojo.ObanCase
 
-  test "delivering digest emails to all active restaurants" do
+  test "enqueueing analyzer jobs for unprocessed reviews" do
     %{id: id_1} = insert(:review, :unprocessed)
     %{id: id_2} = insert(:review, :unprocessed)
     %{id: id_3} = insert(:review, :unprocessed)
@@ -222,7 +222,7 @@ We say "usually" because it's possible to [change a job's priority](https://hexd
 
 This is relevant to our backfill because we want to ensure that new reviews are analyzed first, not stuck behind all the backfill jobs.
 
-Update `enqueue_backfill/0` to set a lower priority modify the test below to confirm jobs are enqueued with the chosen priority.
+Update `enqueue_backfill/0` to set a lower priority and modify the test below to confirm jobs are enqueued with the chosen priority.
 
 <details>
 <summary><i>Use a Hint</i></summary>

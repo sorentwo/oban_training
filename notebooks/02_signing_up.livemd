@@ -110,7 +110,7 @@ defmodule ChowMojo.WelcomeWorker do
 end
 ```
 
-Now use `Oban.insert/1` to enqueue a `ChowMojo.WelcomeWorker` job for your new worker after a user is created within `ChowMojo.create_user/1`. Remember, only pass in the user's `id`, _not_ the entire `User` struct.
+Now use `Oban.insert/1` to enqueue a `ChowMojo.WelcomeWorker` job for your new worker after a user is created within `ChowMojo.Users.create_user/1`. Remember, only pass in the user's `id`, _not_ the entire `User` struct.
 
 <details>
 <summary><i>Use a Hint</i></summary>

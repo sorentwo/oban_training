@@ -204,9 +204,11 @@ end
 ExUnit.run()
 ```
 
-The `unique` option offers controls for which fields are checked (`:worker`, `:queue`, and `:args` by default) and how long a job should be unique for (60 seconds by default). It also has `:states` to control which job states are considered duplicate. By default it includes all states except for `:cancelled` and `:discarded`, which is typically appropriate but undesirable when jobs only have a single attempt.
+The `unique` option offers controls for which fields are checked (`:worker`, `:queue`, and `:args` by default) and how long a job should be unique for (60 seconds by default). It also has `:states` to control which job states are considered duplicate. The default `:successful` group covers every state except `:cancelled` and `:discarded`, which is typically appropriate but undesirable when jobs only have a single attempt.
 
-Configure [uniqueness for all states](https://hexdocs.pm/oban/Oban.Job.html#states/0) and augment the single refund attempt test above to verify that duplicate refunds can't be inserted after a job's discarded.
+Configure [uniqueness for all states](https://hexdocs.pm/oban/Oban.Job.html#unique_states/1) and augment the single refund attempt test above to verify that duplicate refunds can't be inserted after a job's discarded.
+
+Since v2.20 Oban ships named state groups for uniqueness: `:all`, `:incomplete`, `:scheduled`, and `:successful`. Prefer those over hand-rolled lists.
 
 <details>
 <summary><i>Use a hint</i></summary>
@@ -222,12 +224,12 @@ Insert a new a refund job after `drain_queue` in the test above and refute anyth
 refute_enqueued worker: ChowMojo.Refunder
 ```
 
-Get all states with `Oban.Job.states/0`:
+Use the `:all` group to cover every state:
 
 ```elixir
 use Oban.Worker,
   max_attempts: 1,
-  unique: [period: :infinity, keys: [:id], states: Oban.Job.states()]
+  unique: [period: :infinity, keys: [:id], states: :all]
 ```
 
 </details>
